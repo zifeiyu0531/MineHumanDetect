@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zn-ch">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/css/SystemControl.css">
+    <script src="../static/js/SystemControl.js" charset="utf-8"></script>
+    <script src="../static/js/vue-2.6.10/dist/vue.js"></script>
+    <script src="../static/js/jquery-3.4.1.min.js"></script>
+    <title>矿井救援机器人控制平台</title>
+</head>
+<body>
+    <div id="container">
+        <div id="video" class="box">
+            <video id="video-player"></video>
+        </div>
+        <div id="pic" class="box">
+            <div id="pic-top">
+                <img :src="picSrc" alt="shift" id="img-text">
+            </div>
+            <div id="pic-bottom">
+                状态:{[state]}
+                <br>
+                已探测人数:{[num]}
+            </div>
+        </div>
+        <div id="controller" class="box">
+            <div class="sub-controller">
+                <div class="control">
+                    <img src="../static/images/shift.png" alt="shift" class="controller-img">
+                </div>
+                <div class="control">
+                    <img src="../static/images/ctrl.png" alt="ctrl" class="controller-img">
+                </div>
+                <div class="control">
+                    <img src="../static/images/enter.png" alt="enter" class="controller-img">
+                </div>
+            </div>
+            <div class="sub-controller">
+                <div class="direction">
+                    <div class="direction-top">
+                        <img src="../static/images/up.png" alt="上" class="controller-img">
+                    </div>
+                </div>
+                <div class="direction">
+                    <div class="direction-bottom">
+                        <img src="../static/images/left.png" alt="左" class="controller-img">
+                    </div>
+                    <div class="direction-bottom">
+                        <img src="../static/images/down.png" alt="下" class="controller-img">
+                    </div>
+                    <div class="direction-bottom">
+                        <img src="../static/images/right.png" alt="右" class="controller-img">
+                    </div>
+                </div>
+            </div>
+            <div class="sub-controller">
+                <div class="text">
+                    上下左右：控制方向
+                    <br>
+                    shift：加速
+                    <br>
+                    ctrl：减速
+                    <br>
+                    enter: 启动/停止
+                </div>
+            </div>
+        </div>
+        <div id="time" class="box">
+            <div class="button-box">
+                <button class="button">自动模式</button>
+            </div>
+            <div class="button-box">
+                <button class="button">手动模式</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#container',
+        delimiters: ["{[", "]}"],
+        data: {
+            isStart: false, //启动状态
+            detected: 0,   //检测状态
+            num: 0,             //人数
+            picSrc: "../static/images/img-text.jpg",
+            state: "无人",
+            shift: false,
+            ctrl: false,
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        },
+        created: function() {
+            let _this = this;
+            document.onkeydown = function(e) {
+                let key = window.event.keyCode;
+                if (key === 16) {
+                    _this.shift = true;
+                    _this.clickShift();
+                }
+                if (key === 17) {
+                    _this.ctrl = true;
+                    _this.clickCtrl();
+                }
+                if (key === 37) {
+                    _this.left = true;
+                    _this.clickLeft();
+                }
+                if (key === 38) {
+                    _this.up = true;
+                    _this.clickUp();
+                }
+                if (key === 39) {
+                    _this.right = true;
+                    _this.clickRight();
+                }
+                if (key === 40) {
+                    _this.down = true;
+                    _this.clickDown();
+                }
+            };
+            document.onkeyup = function (e) {
+                let key = window.event.keyCode;
+                if (key === 16) {
+                    _this.shift = false;
+                    console.log("加速停止");
+                }
+                if (key === 17) {
+                    _this.ctrl = false;
+                    console.log("减速停止");
+                }
+                if (key === 37) {
+                    _this.left = false;
+                    console.log("左停");
+                }
+                if (key === 38) {
+                    _this.up = false;
+                    console.log("上停");
+                }
+                if (key === 39) {
+                    _this.right = false;
+                    console.log("右停");
+                }
+                if (key === 40) {
+                    _this.down = false;
+                    console.log("下停");
+                }
+            };
+            document.onkeypress = function (e) {
+                let key = window.event.keyCode;
+                if (key === 13) {
+                    _this.clickEnter();
+                }
+            };
+            _this.getPic();
+        },
+        methods: {
+            getPic: function() {
+                _this = this;
+                setTimeout( function() {
+                    _this.getPic()
+                }, 1000);
+                console.log("端口开启");
+                var list = {"key": "getPic"};
+                $.ajax({                                            //图片请求
+                    type : "GET",
+                    contentType: "application/json;charset=UTF-8",
+                    url : "http://127.0.0.1:8000/ajax_pic/",
+                    data : JSON.stringify(list),
+                    success : function(result) {
+                        console.log(result);
+                        if(_this.picSrc !== result.src){
+                            _this.picSrc = result.src;
+                        }
+                        if(_this.detected !== result.detected){
+                            _this.detected = result.detected;
+                            if(result.detected === 0){
+                                _this.state = "无人";
+                            }else{
+                                _this.state = "有人";
+                            }
+                        }
+                        if(_this.num !== result.num){
+                            _this.num = result.num;
+                        }
+                    },
+                    error : function(e){
+                        console.log(e.status);
+                        console.log(e.responseText);
+                    }
+                });
+            },
+            clickEnter: function () {
+                var list = {};
+                if(this.isStart){
+                    this.isStart = false;
+                    console.log("停止");
+                    list = {"key": "stop"};
+                    $.ajax({                                            //停止请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }else{
+                    this.isStart = true;
+                    console.log("开始");
+                    list = {"key": "start"};
+                    $.ajax({                                            //开始请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickShift: function () {
+                var list = {};
+                if(this.shift){
+                    console.log("加速");
+                    list = {"key": "shift"};
+                    $.ajax({                                            //加速请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickCtrl: function () {
+                var list = {};
+                if(this.ctrl){
+                    console.log("减速");
+                    list = {"key": "ctrl"};
+                    $.ajax({                                            //减速请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickLeft: function () {
+                var list = {};
+                if(this.left){
+                    console.log("左转");
+                    list = {"key": "left"};
+                    $.ajax({                                            //左转请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickUp: function () {
+                var list = {};
+                if(this.up){
+                    console.log("前进");
+                    list = {"key": "up"};
+                    $.ajax({                                            //前进请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickRight: function () {
+                var list = {};
+                if(this.right){
+                    console.log("右转");
+                    list = {"key": "right"};
+                    $.ajax({                                            //右转请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickDown: function () {
+                var list = {};
+                if(this.down){
+                    console.log("后退");
+                    list = {"key": "down"};
+                    $.ajax({                                            //后退请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            }
+        }
+    })
+</script>
