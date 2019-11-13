@@ -13,7 +13,7 @@ def text(request):
 
 def ajax_pic(request):
     result_list = {
-        "src": "../static/images/img-text.jpg",
+        "src": "../static/output/2.jpg",
         "detected": 0,
         "num": 0
     }
