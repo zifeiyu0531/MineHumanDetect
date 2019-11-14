@@ -8,12 +8,22 @@ from . import control
 
 BASE_DIR = settings.BASE_DIR
 
+index = 1
+
+
 def text(request):
     return render(request, 'SystemControl.html')
 
 def ajax_pic(request):
+    global index
+    if index == 1:
+        src = "../static/output/1.jpg"
+        index = 2
+    else:
+        src = "../static/output/2.jpg"
+        index = 1
     result_list = {
-        "src": "../static/output/2.jpg",
+        "src": src,
         "detected": 0,
         "num": 0
     }
