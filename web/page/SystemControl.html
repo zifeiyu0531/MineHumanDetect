@@ -164,9 +164,7 @@
                     data : JSON.stringify(list),
                     success : function(result) {
                         console.log(result);
-                        if(_this.picSrc !== result.src){
-                            _this.picSrc = result.src;
-                        }
+                        _this.picSrc = result.src;
                         if(_this.detected !== result.detected){
                             _this.detected = result.detected;
                             if(result.detected === 0){

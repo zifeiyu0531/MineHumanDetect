@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85b82506-ccef-48fa-ab4b-252ce2458a9d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../videocapture/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../videocapture/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../videocapture/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../videocapture/src/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/../videocapture/src/index.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/page/SystemControl.html" beforeDir="false" afterPath="$PROJECT_DIR$/page/SystemControl.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/SystemControl.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/SystemControl.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/view.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/output/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/output/2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,26 +32,31 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/page/SystemControl.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="167" column="40" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/static/css/SystemControl.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="22" lean-forward="true" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+            <state relative-caret-position="171">
+              <caret line="165" column="44" lean-forward="true" selection-start-line="165" selection-start-column="44" selection-end-line="165" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/output/2.jpg">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/css/SystemControl.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-9">
+              <caret line="69" column="12" lean-forward="true" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="117" column="23" selection-start-line="117" selection-start-column="23" selection-end-line="117" selection-end-column="23" />
+            <state relative-caret-position="76">
+              <caret line="20" column="18" lean-forward="true" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -108,10 +109,10 @@
         <option value="$PROJECT_DIR$/static/js/video.min.js" />
         <option value="$PROJECT_DIR$/web/urls.py" />
         <option value="$PROJECT_DIR$/web/control.py" />
-        <option value="$PROJECT_DIR$/page/SystemControl.html" />
         <option value="$PROJECT_DIR$/static/css/SystemControl.css" />
         <option value="$PROJECT_DIR$/web/view.py" />
         <option value="$PROJECT_DIR$/web/settings.py" />
+        <option value="$PROJECT_DIR$/page/SystemControl.html" />
       </list>
     </option>
   </component>
@@ -161,6 +162,12 @@
               <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
               <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="output" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="web" type="b2602c69:ProjectViewProjectNode" />
@@ -247,17 +254,19 @@
       <workItem from="1573538974630" duration="6084000" />
       <workItem from="1573645521449" duration="3187000" />
       <workItem from="1573648798804" duration="1315000" />
+      <workItem from="1573696320858" duration="604000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37581000" />
+    <option name="totallyTimeSpent" value="38185000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1381" height="885" extended-state="7" />
+    <frame x="-6" y="-6" width="1381" height="885" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.16931216" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.11337868" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" />
@@ -267,7 +276,7 @@
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
-      <window_info anchor="bottom" id="Run" order="8" weight="0.40848807" />
+      <window_info active="true" anchor="bottom" id="Run" order="8" visible="true" weight="0.34615386" />
       <window_info anchor="bottom" id="Debug" order="9" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="10" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="11" weight="0.4" />
@@ -315,12 +324,6 @@
     <entry file="file://$PROJECT_DIR$/static/js/SystemControl.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/images/background.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/images/ctrl.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/images/auto.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -337,6 +340,12 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/static/images/ctrl.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/images/background.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/control.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -350,24 +359,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/settings.py">
+    <entry file="file://$PROJECT_DIR$/static/css/SystemControl.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="117" column="23" selection-start-line="117" selection-start-column="23" selection-end-line="117" selection-end-column="23" />
+        <state relative-caret-position="-9">
+          <caret line="69" column="12" lean-forward="true" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/page/SystemControl.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="167" column="40" selection-start-line="167" selection-start-column="34" selection-end-line="167" selection-end-column="40" />
+        <state relative-caret-position="171">
+          <caret line="165" column="44" lean-forward="true" selection-start-line="165" selection-start-column="44" selection-end-line="165" selection-end-column="44" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/SystemControl.css">
+    <entry file="file://$PROJECT_DIR$/static/output/2.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="22" lean-forward="true" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="22" />
+        <state relative-caret-position="76">
+          <caret line="20" column="18" lean-forward="true" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
         </state>
       </provider>
     </entry>
