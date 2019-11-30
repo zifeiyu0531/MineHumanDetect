@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from django.http import JsonResponse
-from . import control
 
 BASE_DIR = settings.BASE_DIR
 

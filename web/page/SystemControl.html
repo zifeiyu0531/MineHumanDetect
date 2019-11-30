@@ -19,9 +19,12 @@
                 <img :src="picSrc" alt="shift" id="img-text">
             </div>
             <div id="pic-bottom">
-
-                <br>
-
+                <div class="button-box">
+                    <img src="../static/images/left.png" alt="left" class="button">
+                </div>
+                <div class="button-box">
+                    <img src="../static/images/right.png" alt="right" class="button">
+                </div>
             </div>
         </div>
         <div id="controller">
@@ -113,6 +116,14 @@
                     _this.down = true;
                     _this.clickDown();
                 }
+                if (key === 69) {
+                    _this.down = true;
+                    _this.clickE();
+                }
+                if (key === 81) {
+                    _this.down = true;
+                    _this.clickQ();
+                }
             };
             document.onkeyup = function (e) {
                 let key = window.event.keyCode;
@@ -139,6 +150,14 @@
                 if (key === 40) {
                     _this.down = false;
                     console.log("下停");
+                }
+                if (key === 69) {
+                    _this.down = false;
+                    console.log("摄像头右停");
+                }
+                if (key === 81) {
+                    _this.down = false;
+                    console.log("摄像头左停");
                 }
             };
             document.onkeypress = function (e) {
@@ -326,6 +345,46 @@
                 if(this.down){
                     console.log("后退");
                     list = {"key": "down"};
+                    $.ajax({                                            //后退请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickE: function () {
+                var list = {};
+                if(this.down){
+                    console.log("摄像头右转");
+                    list = {"key": "e"};
+                    $.ajax({                                            //后退请求
+                        type : "GET",
+                        contentType: "application/json;charset=UTF-8",
+                        url : "http://127.0.0.1/admin/list/",
+                        data : JSON.stringify(list),
+                        success : function(result) {
+                            console.log(result);
+                        },
+                        error : function(e){
+                            console.log(e.status);
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+            },
+            clickQ: function () {
+                var list = {};
+                if(this.down){
+                    console.log("摄像头左转");
+                    list = {"key": "q"};
                     $.ajax({                                            //后退请求
                         type : "GET",
                         contentType: "application/json;charset=UTF-8",
