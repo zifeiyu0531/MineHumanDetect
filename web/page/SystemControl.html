@@ -18,6 +18,14 @@
                 video.
             </video>
         </div>
+        <div class="controls">
+            <!--<button onclick="flv_load()">加载</button>-->
+            <button onclick="flv_start()">开始</button>
+            <button onclick="flv_pause()">暂停</button>
+            <button onclick="flv_destroy()">停止</button>
+            <input style="width:100px" type="text" name="seekpoint"/>
+            <button onclick="flv_seekto()">跳转</button>
+        </div>
         <div id="pic">
             <div id="pic-top">
                 <img :src="picSrc" alt="shift" id="img-text">
@@ -118,6 +126,23 @@
 
             function flv_start() {
                 player.play();
+            }
+
+
+            function flv_pause() {
+                player.pause();
+            }
+
+            function flv_destroy() {
+                player.pause();
+                player.unload();
+                player.detachMediaElement();
+                player.destroy();
+                player = null;
+            }
+
+            function flv_seekto() {
+                player.currentTime = parseFloat(document.getElementsByName('seekpoint')[0].value);
             }
 
             document.onkeydown = function (e) {
