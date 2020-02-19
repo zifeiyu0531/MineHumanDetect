@@ -6,25 +6,21 @@
     <script src="../static/js/SystemControl.js" charset="utf-8"></script>
     <script src="../static/js/vue-2.6.10/dist/vue.js"></script>
     <script src="../static/js/jquery-3.4.1.min.js"></script>
+    <script src="../static/js/flv.min.js"></script>
     <title>矿井救援机器人控制平台</title>
 </head>
 <body id="background">
 <div id="back">
     <div id="container">
         <div id="video">
-            <video id="video-player" src="" controls="controls"></video>
+            <video id="videoElement" class="centeredVideo" controls autoplay muted>Your browser is too old which doesn't
+                support HTML5
+                video.
+            </video>
         </div>
         <div id="pic">
             <div id="pic-top">
                 <img :src="picSrc" alt="shift" id="img-text">
-            </div>
-            <div id="pic-bottom">
-                <div class="button-box">
-                    <img src="../static/images/q.png" alt="left" class="button">
-                </div>
-                <div class="button-box">
-                    <img src="../static/images/e.png" alt="right" class="button">
-                </div>
             </div>
         </div>
         <div id="controller">
@@ -70,7 +66,6 @@
 </div>
 </body>
 </html>
-
 <script type="text/javascript">
     var vm = new Vue({
         el: '#container',
@@ -88,9 +83,44 @@
             left: false,
             right: false
         },
-        created: function() {
+        mounted() {
+            var player;
+            player = document.getElementById('videoElement')
+            if (flvjs.isSupported()) {
+                var flvPlayer = flvjs.createPlayer({
+                    type: 'flv',
+                    "isLive": true,//<====加个这个
+                    url: 'https://d1--cn-gotcha03.bilivideo.com/live-bvc/297086/live_375375_9189689_4000.flv?cdn=cn-gotcha03&expires=1582098798&len=0&oi=1863528357&pt=web&qn=400&trid=6350266b5eab4894b096dc9b48661a77&sigparams=cdn,expires,len,oi,pt,qn,trid&sign=83a15f26825746c016a5bc4e4d59ef2c&ptype=0&platform=web&pSession=AieJJGAp-kEcr-4tPe-HE8W-b2AXHiCYRNWp',//<==自行修改
+                });
+                flvPlayer.attachMediaElement(videoElement);
+                flvPlayer.load(); //加载
+                flv_start();
+            }
+
+            function flv_start() {
+                player.play();
+            }
+        },
+        created: function () {
             let _this = this;
-            document.onkeydown = function(e) {
+            var player = document.getElementById('videoElement');
+            if (flvjs.isSupported()) {
+                var flvPlayer = flvjs.createPlayer({
+                    type: 'flv',
+                    "isLive": true,//<====加个这个
+                    url: 'https://d1--cn-gotcha03.bilivideo.com/live-bvc/297086/live_375375_9189689_4000.flv?cdn=cn-gotcha03&expires=1582098798&len=0&oi=1863528357&pt=web&qn=400&trid=6350266b5eab4894b096dc9b48661a77&sigparams=cdn,expires,len,oi,pt,qn,trid&sign=83a15f26825746c016a5bc4e4d59ef2c&ptype=0&platform=web&pSession=AieJJGAp-kEcr-4tPe-HE8W-b2AXHiCYRNWp',//<==自行修改
+
+                });
+                flvPlayer.attachMediaElement(videoElement);
+                flvPlayer.load(); //加载
+                flv_start();
+            }
+
+            function flv_start() {
+                player.play();
+            }
+
+            document.onkeydown = function (e) {
                 let key = window.event.keyCode;
                 if (key === 16) {
                     _this.shift = true;
@@ -169,34 +199,34 @@
             _this.getPic();
         },
         methods: {
-            getPic: function() {
+            getPic: function () {
                 _this = this;
-                setTimeout( function() {
+                setTimeout(function () {
                     _this.getPic()
                 }, 1000);
                 console.log("端口开启");
                 var list = {"key": "getPic"};
                 $.ajax({                                            //图片请求
-                    type : "GET",
+                    type: "GET",
                     contentType: "application/json;charset=UTF-8",
-                    url : "http://127.0.0.1:8000/ajax_pic/",
-                    data : JSON.stringify(list),
-                    success : function(result) {
+                    url: "http://127.0.0.1:8000/ajax_pic/",
+                    data: JSON.stringify(list),
+                    success: function (result) {
                         console.log(result);
                         _this.picSrc = result.src;
-                        if(_this.detected !== result.detected){
+                        if (_this.detected !== result.detected) {
                             _this.detected = result.detected;
-                            if(result.detected === 0){
+                            if (result.detected === 0) {
                                 _this.state = "无人";
-                            }else{
+                            } else {
                                 _this.state = "有人";
                             }
                         }
-                        if(_this.num !== result.num){
+                        if (_this.num !== result.num) {
                             _this.num = result.num;
                         }
                     },
-                    error : function(e){
+                    error: function (e) {
                         console.log(e.status);
                         console.log(e.responseText);
                     }
@@ -204,36 +234,36 @@
             },
             clickEnter: function () {
                 var list = {};
-                if(this.isStart){
+                if (this.isStart) {
                     this.isStart = false;
                     console.log("停止");
                     list = {"key": "stop"};
                     $.ajax({                                            //停止请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
                     });
-                }else{
+                } else {
                     this.isStart = true;
                     console.log("开始");
                     list = {"key": "start"};
                     $.ajax({                                            //开始请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -242,18 +272,18 @@
             },
             clickShift: function () {
                 var list = {};
-                if(this.shift){
+                if (this.shift) {
                     console.log("加速");
                     list = {"key": "shift"};
                     $.ajax({                                            //加速请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -262,18 +292,18 @@
             },
             clickCtrl: function () {
                 var list = {};
-                if(this.ctrl){
+                if (this.ctrl) {
                     console.log("减速");
                     list = {"key": "ctrl"};
                     $.ajax({                                            //减速请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -282,18 +312,18 @@
             },
             clickLeft: function () {
                 var list = {};
-                if(this.left){
+                if (this.left) {
                     console.log("左转");
                     list = {"key": "left"};
                     $.ajax({                                            //左转请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -302,18 +332,18 @@
             },
             clickUp: function () {
                 var list = {};
-                if(this.up){
+                if (this.up) {
                     console.log("前进");
                     list = {"key": "up"};
                     $.ajax({                                            //前进请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -322,18 +352,18 @@
             },
             clickRight: function () {
                 var list = {};
-                if(this.right){
+                if (this.right) {
                     console.log("右转");
                     list = {"key": "right"};
                     $.ajax({                                            //右转请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -342,18 +372,18 @@
             },
             clickDown: function () {
                 var list = {};
-                if(this.down){
+                if (this.down) {
                     console.log("后退");
                     list = {"key": "down"};
                     $.ajax({                                            //后退请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -362,18 +392,18 @@
             },
             clickE: function () {
                 var list = {};
-                if(this.down){
+                if (this.down) {
                     console.log("摄像头右转");
                     list = {"key": "e"};
                     $.ajax({                                            //后退请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
@@ -382,18 +412,18 @@
             },
             clickQ: function () {
                 var list = {};
-                if(this.down){
+                if (this.down) {
                     console.log("摄像头左转");
                     list = {"key": "q"};
                     $.ajax({                                            //后退请求
-                        type : "GET",
+                        type: "GET",
                         contentType: "application/json;charset=UTF-8",
-                        url : "http://127.0.0.1/admin/list/",
-                        data : JSON.stringify(list),
-                        success : function(result) {
+                        url: "http://127.0.0.1/admin/list/",
+                        data: JSON.stringify(list),
+                        success: function (result) {
                             console.log(result);
                         },
-                        error : function(e){
+                        error: function (e) {
                             console.log(e.status);
                             console.log(e.responseText);
                         }
