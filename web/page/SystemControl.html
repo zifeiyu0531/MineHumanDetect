@@ -30,6 +30,18 @@
             <div id="pic-top">
                 <img :src="picSrc" alt="shift" id="img-text">
             </div>
+            <div id="text">
+                <p>状态:{{ num }}</p>
+                <p>发现方式:{{ detected }}</p>
+            </div>
+            <div id="pic-bottom">
+                <div class="button-box">
+                    <img src="../static/images/q.png" alt="camera-left" class="camera-button">
+                </div>
+                <div class="button-box">
+                    <img src="../static/images/e.png" alt="camera-right" class="camera-button">
+                </div>
+            </div>
         </div>
         <div id="controller">
             <div class="sub-controller">
@@ -80,7 +92,7 @@
         delimiters: ["{[", "]}"],
         data: {
             isStart: false, //启动状态
-            detected: 0,   //检测状态
+            detected: "",   //发现方式
             num: 0,             //人数
             picSrc: "../static/images/img-text.jpg",
             state: "无人",
@@ -89,16 +101,19 @@
             up: false,
             down: false,
             left: false,
-            right: false
+            right: false,
+            socket: ""       //websocket
         },
         mounted() {
+            let _this = this;
+
             var player;
             player = document.getElementById('videoElement')
             if (flvjs.isSupported()) {
                 var flvPlayer = flvjs.createPlayer({
                     type: 'flv',
                     "isLive": true,//<====加个这个
-                    url: 'https://d1--cn-gotcha03.bilivideo.com/live-bvc/297086/live_375375_9189689_4000.flv?cdn=cn-gotcha03&expires=1582098798&len=0&oi=1863528357&pt=web&qn=400&trid=6350266b5eab4894b096dc9b48661a77&sigparams=cdn,expires,len,oi,pt,qn,trid&sign=83a15f26825746c016a5bc4e4d59ef2c&ptype=0&platform=web&pSession=AieJJGAp-kEcr-4tPe-HE8W-b2AXHiCYRNWp',//<==自行修改
+                    url: 'https://js.live-play.acgvideo.com/live-js/540081/live_21838789_9794854.flv?wsSecret=241266172e4011880e8752f2e73cc112&wsTime=1582267928&trid=ddc85c95a8ca4e2699465950f77f77a1&pt=web&oi=1863461667&order=1&sig=no&platform=web&pSession=KdrTQiZc-x2PD-4pNE-Rr4m-J03WGbGsxpY6',//<==自行修改
                 });
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load(); //加载
@@ -108,43 +123,11 @@
             function flv_start() {
                 player.play();
             }
+
+            this.init();    //建立socket
         },
         created: function () {
             let _this = this;
-            var player = document.getElementById('videoElement');
-            if (flvjs.isSupported()) {
-                var flvPlayer = flvjs.createPlayer({
-                    type: 'flv',
-                    "isLive": true,//<====加个这个
-                    url: 'https://d1--cn-gotcha03.bilivideo.com/live-bvc/297086/live_375375_9189689_4000.flv?cdn=cn-gotcha03&expires=1582098798&len=0&oi=1863528357&pt=web&qn=400&trid=6350266b5eab4894b096dc9b48661a77&sigparams=cdn,expires,len,oi,pt,qn,trid&sign=83a15f26825746c016a5bc4e4d59ef2c&ptype=0&platform=web&pSession=AieJJGAp-kEcr-4tPe-HE8W-b2AXHiCYRNWp',//<==自行修改
-
-                });
-                flvPlayer.attachMediaElement(videoElement);
-                flvPlayer.load(); //加载
-                flv_start();
-            }
-
-            function flv_start() {
-                player.play();
-            }
-
-
-            function flv_pause() {
-                player.pause();
-            }
-
-            function flv_destroy() {
-                player.pause();
-                player.unload();
-                player.detachMediaElement();
-                player.destroy();
-                player = null;
-            }
-
-            function flv_seekto() {
-                player.currentTime = parseFloat(document.getElementsByName('seekpoint')[0].value);
-            }
-
             document.onkeydown = function (e) {
                 let key = window.event.keyCode;
                 if (key === 16) {
@@ -221,42 +204,8 @@
                     _this.clickEnter();
                 }
             };
-            _this.getPic();
         },
         methods: {
-            getPic: function () {
-                _this = this;
-                setTimeout(function () {
-                    _this.getPic()
-                }, 1000);
-                console.log("端口开启");
-                var list = {"key": "getPic"};
-                $.ajax({                                            //图片请求
-                    type: "GET",
-                    contentType: "application/json;charset=UTF-8",
-                    url: "http://127.0.0.1:8000/ajax_pic/",
-                    data: JSON.stringify(list),
-                    success: function (result) {
-                        console.log(result);
-                        _this.picSrc = result.src;
-                        if (_this.detected !== result.detected) {
-                            _this.detected = result.detected;
-                            if (result.detected === 0) {
-                                _this.state = "无人";
-                            } else {
-                                _this.state = "有人";
-                            }
-                        }
-                        if (_this.num !== result.num) {
-                            _this.num = result.num;
-                        }
-                    },
-                    error: function (e) {
-                        console.log(e.status);
-                        console.log(e.responseText);
-                    }
-                });
-            },
             clickEnter: function () {
                 var list = {};
                 if (this.isStart) {
@@ -420,7 +369,7 @@
                 if (this.down) {
                     console.log("摄像头右转");
                     list = {"key": "e"};
-                    $.ajax({                                            //后退请求
+                    $.ajax({                                            //摄像头右转
                         type: "GET",
                         contentType: "application/json;charset=UTF-8",
                         url: "http://127.0.0.1/admin/list/",
@@ -440,7 +389,7 @@
                 if (this.down) {
                     console.log("摄像头左转");
                     list = {"key": "q"};
-                    $.ajax({                                            //后退请求
+                    $.ajax({                                            //摄像头左转
                         type: "GET",
                         contentType: "application/json;charset=UTF-8",
                         url: "http://127.0.0.1/admin/list/",
@@ -454,7 +403,61 @@
                         }
                     });
                 }
+            },
+
+            init: function () {
+                if (typeof (WebSocket) === "undefined") {
+                    alert("您的浏览器不支持socket")
+                } else {
+                    path = "ws://localhost:8000/control/socket/";
+                    // 实例化socket
+                    this.socket = new WebSocket(path);
+                    // 监听socket连接
+                    this.socket.onopen = this.open;
+                    // 监听socket错误信息
+                    this.socket.onerror = this.error;
+                    // 监听socket消息
+                    this.socket.onmessage = this.getMessage;
+                }
+            },
+            open: function () {
+                console.log("socket连接成功")
+            },
+            error: function () {
+                console.log("连接错误,重试");
+                this.init();
+            },
+            getMessage: function (msg) {
+                console.log(msg.data);
+                var ifFindPeople = msg.data.ifFindPeople;
+                var picUrl = msg.data.ifFindPeoplepicUrl;
+                var findType = msg.data.findType;
+
+                if(ifFindPeople === "true") {
+                    this.state = "有人"
+                }else{
+                    this.state = "无人"
+                }
+
+                this.picSrc = picUrl;
+
+                if(findType === "camera"){
+                    this.detected = "摄像头识别"
+                }else{
+                    this.detected = "红外感应"
+                }
+            },
+            send: function () {
+                this.socket.send(params)
+            },
+            close: function () {
+                console.log("socket已经关闭")
             }
+        },
+
+        destroyed() {
+            // 销毁监听
+            this.socket.onclose = this.close
         }
     })
 </script>
